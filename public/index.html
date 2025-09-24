@@ -1,21 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Day for Good</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: #f9fafb;
+    }
+
+    header {
+      background: #4CAF50;
+      color: white;
+      padding: 1rem;
+    }
+
+    h1 {
+      margin: 0.5em 0;
+    }
+
+    p {
+      font-size: 1.2em;
+      margin-bottom: 2em;
+    }
+
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    footer {
+      margin-top: 3em;
+      font-size: 0.9em;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <a href="index.html" class="home-button">🏠 Home</a>
+    <h1>🌎 Welcome to Day for Good</h1>
   </header>
 
-  <h1>Welcome to Day for Good</h1>
-  <p>Make a donation and support a good cause.</p>
+  <main>
+    <p>Make a donation and support a good cause.</p>
+    <button id="donate5">Donate $5</button>
+  </main>
 
-  <form action="/create-checkout-session" method="POST">
-    <button type="submit">Donate $5</button>
-  </form>
+  <footer>
+    <p>Thank you for supporting positive change 💚</p>
+  </footer>
+
+  <script>
+    document.getElementById("donate5").addEventListener("click", async () => {
+      const response = await fetch("/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const session = await response.json();
+
+      if (session.url) {
+        // ✅ Redirect to Stripe Checkout
+        window.location.href = session.url;
+      } else {
+        alert("Something went wrong. Please try again.");
+        console.error(session);
+      }
+    });
+  </script>
 </body>
 </html>
