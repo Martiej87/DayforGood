@@ -7,21 +7,40 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Navigation -->
+  <!-- ✅ Navbar -->
   <nav class="navbar">
-    <a href="index.html" class="logo">Day for Good</a>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="success.html">Success</a>
-      <a href="cancel.html">Cancel</a>
-    </div>
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="success.html" class="nav-link">Success</a>
+    <a href="cancel.html" class="nav-link">Cancel</a>
   </nav>
 
   <h1>Welcome to Day for Good</h1>
   <p>Make a donation and support a good cause.</p>
 
-  <form action="/create-checkout-session" method="POST">
+  <!-- ✅ Donation Form -->
+  <form id="donation-form">
     <button type="submit">Donate $5</button>
   </form>
+
+  <!-- ✅ Stripe Redirect Script -->
+  <script>
+    document.getElementById("donation-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      try {
+        const response = await fetch("/create-checkout-session", { method: "POST" });
+        const data = await response.json();
+
+        if (data.url) {
+          window.location.href = data.url; // redirect to Stripe checkout
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      } catch (err) {
+        console.error("Error:", err);
+        alert("An error occurred. Please try again.");
+      }
+    });
+  </script>
 </body>
 </html>
