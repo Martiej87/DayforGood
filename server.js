@@ -1,42 +1,26 @@
-// server.js - Express backend for DayForGood with donation logging
-// Install: npm install express stripe body-parser cors dotenv fs
-require('dotenv').config();
 const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const bodyParser = require('body-parser');
 
 const app = express();
-app.use(cors());
+const PORT = process.env.PORT || 4242;
+
+app.use(express.static('public'));
 app.use(bodyParser.json());
-app.use(express.static('.')); // serve static files (index.html, etc.)
 
-const DONATIONS_FILE = path.join(__dirname, 'donations.json');
-
-function saveDonation(donation) {
-  let donations = [];
-  if (fs.existsSync(DONATIONS_FILE)) {
-    donations = JSON.parse(fs.readFileSync(DONATIONS_FILE));
-  }
-  donations.push(donation);
-  fs.writeFileSync(DONATIONS_FILE, JSON.stringify(donations, null, 2));
-}
-
+// Create Stripe Checkout session
 app.post('/create-checkout-session', async (req, res) => {
-  const { amount, charityName, donationDate } = req.body;
+  const { charity, donationDate } = req.body;
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [{
         price_data: {
           currency: 'usd',
-          product_data: {
-            name: `Donation — ${charityName}`,
-            description: `Workday donation for ${donationDate}`
-          },
-          unit_amount: Math.round(amount * 100),
+          product_data: { name: `Donation to ${charity}` },
+          unit_amount: 5000, // default $50 donation
         },
         quantity: 1,
       }],
@@ -45,31 +29,34 @@ app.post('/create-checkout-session', async (req, res) => {
       cancel_url: 'http://localhost:4242/cancel.html',
     });
 
-    // Save donation log immediately (MVP approach)
-    const donationRecord = {
+    // Save donation log (MVP - logs at checkout creation)
+    const donation = {
       id: session.id,
-      amount,
-      charity: charityName,
+      amount: 50,
+      charity,
       donationDate,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
-    saveDonation(donationRecord);
+    const logPath = path.join(__dirname, 'donations.json');
+    let donations = [];
+    if (fs.existsSync(logPath)) {
+      donations = JSON.parse(fs.readFileSync(logPath));
+    }
+    donations.push(donation);
+    fs.writeFileSync(logPath, JSON.stringify(donations, null, 2));
 
-    res.json({ id: session.id, publicKey: process.env.STRIPE_PUBLIC_KEY });
+    res.json({ id: session.id, url: session.url });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
 
+// Endpoint to fetch all donations
 app.get('/donations', (req, res) => {
-  if (fs.existsSync(DONATIONS_FILE)) {
-    const donations = JSON.parse(fs.readFileSync(DONATIONS_FILE));
-    res.json(donations);
-  } else {
-    res.json([]);
-  }
+  const logPath = path.join(__dirname, 'donations.json');
+  if (!fs.existsSync(logPath)) return res.json([]);
+  const donations = JSON.parse(fs.readFileSync(logPath));
+  res.json(donations);
 });
 
-const PORT = process.env.PORT || 4242;
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
