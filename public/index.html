@@ -7,21 +7,15 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>
+    <a href="index.html" class="home-button">🏠 Home</a>
+  </header>
+
   <h1>Welcome to Day for Good</h1>
   <p>Make a donation and support a good cause.</p>
 
-  <form id="donation-form">
+  <form action="/create-checkout-session" method="POST">
     <button type="submit">Donate $5</button>
   </form>
-
-  <script>
-    const form = document.getElementById("donation-form");
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const res = await fetch("/create-checkout-session", { method: "POST" });
-      const data = await res.json();
-      window.location.href = data.url;
-    });
-  </script>
 </body>
 </html>
