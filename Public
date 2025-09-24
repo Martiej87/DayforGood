@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day for Good</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Welcome to Day for Good</h1>
+  <p>Make a donation and support a good cause.</p>
+
+  <form action="/create-checkout-session" method="POST">
+    <button type="submit">Donate $5</button>
+  </form>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donation Successful</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>🎉 Thank you for your donation!</h1>
+  <p>Your contribution makes a real difference.</p>
+  <a href="/">Go back to homepage</a>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donation Canceled</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>⚠️ Donation Canceled</h1>
+  <p>No worries — you can try again when ready.</p>
+  <a href="/">Return to homepage</a>
+</body>
+</html>
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 50px;
+}
+
+h1 {
+  color: #2c3e50;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #219150;
+}
