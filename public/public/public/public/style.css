@@ -1,55 +1,70 @@
+/* Global reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
 body {
   font-family: Arial, sans-serif;
   text-align: center;
-  margin: 50px;
-  background: #f8f9fa;
+  background: #f9fafb;
+  color: #333;
+  padding: 2em;
 }
 
+/* Header */
+header {
+  background: #4CAF50;
+  color: white;
+  padding: 1.2em;
+  margin-bottom: 2em;
+  border-radius: 0 0 10px 10px;
+}
+
+header h1 {
+  font-size: 2em;
+}
+
+/* Main content */
+main p {
+  font-size: 1.2em;
+  margin-bottom: 2em;
+}
+
+/* Buttons */
+button, a.button {
+  display: inline-block;
+  background: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border: none;
+  padding: 14px 28px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover, a.button:hover {
+  background: #45a049;
+}
+
+/* Success & Cancel page headings */
 h1 {
-  color: #2c3e50;
+  margin-bottom: 1em;
+  font-size: 2em;
 }
 
 p {
-  font-size: 18px;
-  margin-bottom: 20px;
+  margin-bottom: 1.5em;
+  font-size: 1.1em;
 }
 
-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  background: #27ae60;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #219150;
-}
-
-a {
-  display: inline-block;
-  margin-top: 20px;
-  color: #2980b9;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-/* Home button styling */
-.home-button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #27ae60;
-  color: #fff;
-  font-weight: bold;
-  text-decoration: none;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-}
-
-.home-button:hover {
-  background-color: #219150;
+/* Footer */
+footer {
+  margin-top: 3em;
+  font-size: 0.9em;
+  color: #555;
 }
