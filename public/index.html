@@ -10,15 +10,18 @@
   <h1>Welcome to Day for Good</h1>
   <p>Make a donation and support a good cause.</p>
 
-  <form action="/create-checkout-session" method="POST">
-    <button id="donateButton">Donate $5</button>
-<script>
-  document.getElementById("donateButton").addEventListener("click", () => {
-    fetch("/create-checkout-session", { method: "POST" })
-      .then(res => res.json())
-      .then(data => {
-        // redirect to Stripe checkout
-        window.location.href = data.url;
-      });
-  });
-</script>
+  <form id="donation-form">
+    <button type="submit">Donate $5</button>
+  </form>
+
+  <script>
+    const form = document.getElementById("donation-form");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const res = await fetch("/create-checkout-session", { method: "POST" });
+      const data = await res.json();
+      window.location.href = data.url;
+    });
+  </script>
+</body>
+</html>
