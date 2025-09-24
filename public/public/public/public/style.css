@@ -38,3 +38,18 @@ a {
 a:hover {
   text-decoration: underline;
 }
+/* Home button styling */
+.home-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #27ae60;
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.home-button:hover {
+  background-color: #219150;
+}
