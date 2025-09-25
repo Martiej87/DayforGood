@@ -1,73 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Day for Good</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="success.html">Success</a>
-      <a href="cancel.html">Cancel</a>
-    </nav>
-  </header>
+  <!-- ✅ Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="success.html" class="nav-link">Success</a>
+    <a href="cancel.html" class="nav-link">Cancel</a>
+  </nav>
 
-  <main>
-    <h1>Donate a Day for Good 🌍</h1>
-    <p>Contribute the value of your workday to causes that matter.</p>
+  <h1>Day for Good</h1>
+  <p>Enter your hourly wage and donate a full day of work (8 hours).</p>
 
-    <!-- Preset donation options -->
-    <h2>Choose Your Donation</h2>
-    <div class="button-group">
-      <button onclick="donatePreset(4000)">$40 (Half Day)</button>
-      <button onclick="donatePreset(8000)">$80 (Full Day)</button>
-      <button onclick="donatePreset(16000)">$160 (Two Days)</button>
-    </div>
+  <!-- ✅ Wage Input Form -->
+  <form id="donation-form">
+    <label for="wage">Hourly Wage ($):</label>
+    <input type="number" id="wage" name="wage" placeholder="e.g. 20" required>
+    <button type="submit" class="btn">Donate a Day (8 Hours)</button>
+  </form>
 
-    <hr />
-
-    <!-- Wage calculator -->
-    <h2>Or Personalize Your Donation</h2>
-    <p>Enter your hourly wage, and we’ll calculate an 8-hour day:</p>
-    <input type="number" id="wageInput" placeholder="Enter hourly wage ($)" />
-    <button onclick="calculateDonation()">Calculate</button>
-
-    <div id="calculatedResult"></div>
-  </main>
-
-  <footer>
-    <p>© 2025 Day for Good • Making the world better, one day at a time 🌍</p>
-  </footer>
-
+  <!-- ✅ Stripe Integration Script -->
   <script>
-    async function donatePreset(amount) {
-      const response = await fetch("/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount })
-      });
-      const session = await response.json();
-      window.location.href = session.url;
-    }
+    document.getElementById("donation-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    function calculateDonation() {
-      const wage = document.getElementById("wageInput").value;
-      const resultDiv = document.getElementById("calculatedResult");
-
+      const wage = document.getElementById("wage").value;
       if (!wage || wage <= 0) {
-        resultDiv.innerHTML = "<p style='color:red;'>Please enter a valid wage.</p>";
+        alert("Please enter a valid hourly wage.");
         return;
       }
 
-      const amount = wage * 8; // 8 hours
-      resultDiv.innerHTML = `
-        <p>That’s <strong>$${amount}</strong> for a full 8-hour day.</p>
-        <button onclick="donatePreset(${amount * 100})">Donate $${amount}</button>
-      `;
-    }
+      const donationAmount = wage * 8 * 100; // 8 hours, convert to cents
+
+      try {
+        const response = await fetch("/create-checkout-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: donationAmount }),
+        });
+
+        const data = await response.json();
+        if (data.url) {
+          window.location.href = data.url; // redirect to Stripe
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      } catch (err) {
+        console.error("Error:", err);
+        alert("An error occurred. Please try again.");
+      }
+    });
   </script>
 </body>
 </html>
