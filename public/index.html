@@ -3,44 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Day for Good</title>
+  <title>Donate a Workday</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- ✅ Navbar -->
-  <nav class="navbar">
-    <a href="index.html" class="nav-link">Home</a>
-    <a href="success.html" class="nav-link">Success</a>
-    <a href="cancel.html" class="nav-link">Cancel</a>
-  </nav>
+  <h1>Donate a Workday</h1>
+  <p>Select your hourly wage, and we'll calculate an 8-hour workday donation.</p>
 
-  <h1>🌎 Welcome to Day for Good</h1>
-  <p>Make a donation and support a good cause.</p>
+  <div id="donation-options">
+    <button onclick="donate(10)">I earn $10/hr</button>
+    <button onclick="donate(20)">I earn $20/hr</button>
+    <button onclick="donate(30)">I earn $30/hr</button>
+    <button onclick="donate(50)">I earn $50/hr</button>
+  </div>
 
-  <!-- ✅ Donation Form -->
-  <form id="donation-form">
-    <button type="submit">Donate $5</button>
-  </form>
-
-  <!-- ✅ Stripe Redirect Script -->
+  <script src="https://js.stripe.com/v3/"></script>
   <script>
-    document.getElementById("donation-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
+    const stripe = Stripe("pk_test_12345"); // replace with your real publishable key
 
-      try {
-        const response = await fetch("/create-checkout-session", { method: "POST" });
-        const data = await response.json();
+    function donate(hourlyRate) {
+      // 1 workday = 8 hours
+      const amount = hourlyRate * 8 * 100; // Stripe needs cents
 
-        if (data.url) {
-          window.location.href = data.url; // redirect to Stripe checkout
-        } else {
-          alert("Something went wrong. Please try again.");
-        }
-      } catch (err) {
-        console.error("Error:", err);
-        alert("An error occurred. Please try again.");
-      }
-    });
+      fetch("/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount })
+      })
+      .then(res => res.json())
+      .then(data => {
+        return stripe.redirectToCheckout({ sessionId: data.id });
+      });
+    }
   </script>
 </body>
 </html>
