@@ -28,23 +28,24 @@ app.post("/create-checkout-session", async (req, res) => {
     const amountInCents = Math.round(amount * 100);
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: "Donation",
-            },
-            unit_amount: amountInCents,
-          },
-          quantity: 1,
+  payment_method_types: ["card"],
+  line_items: [
+    {
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: "Donation",
         },
-      ],
-      mode: "payment",
-      success_url: "http://localhost:3000/success.html",
-      cancel_url: "http://localhost:3000/cancel.html",
-    });
+        unit_amount: amountInCents,
+      },
+      quantity: 1,
+    },
+  ],
+  mode: "payment",
+  success_url: "http://localhost:3000/success.html?amount=" + amount,
+  cancel_url: "http://localhost:3000/cancel.html",
+});
+
 
     res.json({ url: session.url });
   } catch (err) {
