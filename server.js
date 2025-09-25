@@ -1,24 +1,20 @@
 // server.js
-import express from "express";
-import Stripe from "stripe";
-import dotenv from "dotenv";
-
-dotenv.config();
+require("dotenv").config();
+const express = require("express");
+const path = require("path");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const PORT = process.env.PORT || 3000;
 
-app.use(express.json()); // for parsing JSON
-app.use(express.static("public")); // serve static files (index.html, success.html, cancel.html, style.css)
+// Middleware
+app.use(express.static("public"));
+app.use(express.json());
 
-// ✅ API endpoint to create a Checkout Session
+// Create Checkout Session
 app.post("/create-checkout-session", async (req, res) => {
   try {
     const { amount } = req.body;
-
-    if (!amount || amount < 1) {
-      return res.status(400).json({ error: "Invalid donation amount" });
-    }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -26,26 +22,27 @@ app.post("/create-checkout-session", async (req, res) => {
         {
           price_data: {
             currency: "usd",
-            product_data: { name: "Day for Good Donation" },
-            unit_amount: amount, // in cents
+            product_data: {
+              name: "Day for Good Donation",
+            },
+            unit_amount: amount, // amount in cents
           },
           quantity: 1,
         },
       ],
       mode: "payment",
-      success_url: "/success.html",
-      cancel_url: "/cancel.html",
+      success_url: `${req.protocol}://${req.get("host")}/success.html`,
+      cancel_url: `${req.protocol}://${req.get("host")}/cancel.html`,
     });
 
-    res.json({ url: session.url });
+    res.json({ id: session.id });
   } catch (err) {
-    console.error("Error creating checkout session:", err);
-    res.status(500).json({ error: "Something went wrong creating checkout session" });
+    console.error(err);
+    res.status(500).json({ error: "Something went wrong." });
   }
 });
 
-// ✅ Start server
-const PORT = process.env.PORT || 3000;
+// Start server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
