@@ -8,19 +8,12 @@ dotenv.config();
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// ✅ Middleware to parse JSON
-app.use(express.json());
-
-// ✅ Serve static files from "public" folder
+// ✅ Serve static files (index.html, style.css, success.html, cancel.html)
 app.use(express.static("public"));
 
-// ✅ API endpoint to create a Checkout Session
+// ✅ Create Checkout Session
 app.post("/create-checkout-session", async (req, res) => {
   try {
-    // Get amount from request body (default $5 if not provided)
-    const amount = req.body.amount || 5;
-    const amountInCents = Math.round(amount * 100);
-
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -30,15 +23,15 @@ app.post("/create-checkout-session", async (req, res) => {
             product_data: {
               name: "Donation",
             },
-            unit_amount: amountInCents,
+            unit_amount: 500, // $5 donation
           },
           quantity: 1,
         },
       ],
       mode: "payment",
-      // 👇 Pass donation amount back into success URL
-      success_url: `http://localhost:3000/success.html?amount=${amount}`,
-      cancel_url: "http://localhost:3000/cancel.html",
+      // 👇 IMPORTANT: Replace with your actual Render domain
+      success_url: "https://your-render-app.onrender.com/success.html",
+      cancel_url: "https://your-render-app.onrender.com/cancel.html",
     });
 
     res.json({ url: session.url });
@@ -51,5 +44,5 @@ app.post("/create-checkout-session", async (req, res) => {
 // ✅ Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
