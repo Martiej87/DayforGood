@@ -1,38 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Day for Good</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <a href="index.html" class="nav-link">Home</a>
-    <a href="success.html" class="nav-link">Success</a>
-    <a href="cancel.html" class="nav-link">Cancel</a>
-  </nav>
+  <header>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="success.html">Success</a>
+      <a href="cancel.html">Cancel</a>
+    </nav>
+  </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
+  <main>
     <h1>Donate a Day for Good 🌍</h1>
     <p>Contribute the value of your workday to causes that matter.</p>
-  </section>
 
-  <!-- Donation Options -->
-  <section class="donations">
+    <!-- Preset donation options -->
     <h2>Choose Your Donation</h2>
-    <form action="/create-checkout-session" method="POST">
-      <button type="submit" name="amount" value="40">$40 (Half Day)</button>
-      <button type="submit" name="amount" value="80">$80 (Full Day)</button>
-      <button type="submit" name="amount" value="160">$160 (Two Days)</button>
-    </form>
-  </section>
+    <div class="button-group">
+      <button onclick="donatePreset(4000)">$40 (Half Day)</button>
+      <button onclick="donatePreset(8000)">$80 (Full Day)</button>
+      <button onclick="donatePreset(16000)">$160 (Two Days)</button>
+    </div>
 
-  <!-- Footer -->
+    <hr />
+
+    <!-- Wage calculator -->
+    <h2>Or Personalize Your Donation</h2>
+    <p>Enter your hourly wage, and we’ll calculate an 8-hour day:</p>
+    <input type="number" id="wageInput" placeholder="Enter hourly wage ($)" />
+    <button onclick="calculateDonation()">Calculate</button>
+
+    <div id="calculatedResult"></div>
+  </main>
+
   <footer>
-    <p>© 2025 Day for Good • Making the world better, one day at a time 🌎</p>
+    <p>© 2025 Day for Good • Making the world better, one day at a time 🌍</p>
   </footer>
+
+  <script>
+    async function donatePreset(amount) {
+      const response = await fetch("/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount })
+      });
+      const session = await response.json();
+      window.location.href = session.url;
+    }
+
+    function calculateDonation() {
+      const wage = document.getElementById("wageInput").value;
+      const resultDiv = document.getElementById("calculatedResult");
+
+      if (!wage || wage <= 0) {
+        resultDiv.innerHTML = "<p style='color:red;'>Please enter a valid wage.</p>";
+        return;
+      }
+
+      const amount = wage * 8; // 8 hours
+      resultDiv.innerHTML = `
+        <p>That’s <strong>$${amount}</strong> for a full 8-hour day.</p>
+        <button onclick="donatePreset(${amount * 100})">Donate $${amount}</button>
+      `;
+    }
+  </script>
 </body>
 </html>
