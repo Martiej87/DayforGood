@@ -1,10 +1,16 @@
-# Day for Good
+# 🌎 Day for Good
 
-A simple donation site powered by Stripe Checkout.
+A simple donation website built with **Node.js**, **Express**, and **Stripe Checkout**.  
+Users can make quick $5 donations securely with Stripe.
 
-## Setup
+---
 
-1. Clone this repository to your local machine:
-   ```bash
-   git clone https://github.com/YOUR-USERNAME/DayforGood.git
-   cd DayforGood
+## 🚀 Features
+- Clean, responsive homepage with gradient background  
+- Secure donation checkout via Stripe  
+- Success + Cancel pages with navigation  
+- Easy to customize donation amount or design  
+
+---
+
+## 📂 Project Structure
