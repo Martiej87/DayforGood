@@ -1,16 +1,18 @@
 # 🌎 Day for Good
 
-A simple donation website built with **Node.js**, **Express**, and **Stripe Checkout**.  
-Users can make quick $5 donations securely with Stripe.
+**Day for Good** is a simple donation platform where people can give back by donating the value of a workday (or any amount they choose).  
 
 ---
 
-## 🚀 Features
-- Clean, responsive homepage with gradient background  
-- Secure donation checkout via Stripe  
-- Success + Cancel pages with navigation  
-- Easy to customize donation amount or design  
+## ✨ Features
+- 💳 Secure payments powered by **Stripe Checkout**  
+- 🌈 Clean, modern UI with responsive design  
+- ⏱️ Donation options:  
+  - Fixed $5 donation  
+  - Donate the value of **1 workday (8 hours)**  
+  - Donate based on your **hourly wage × hours donated**  
+- 📄 Thank-you page on success + easy retry if canceled  
 
 ---
 
-## 📂 Project Structure
+## 🚀 Project Structure
