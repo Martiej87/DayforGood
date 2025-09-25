@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Navbar -->
+  <!-- ✅ Navbar -->
   <nav class="navbar">
     <a href="index.html" class="nav-link">Home</a>
     <a href="success.html" class="nav-link">Success</a>
@@ -15,14 +15,20 @@
   </nav>
 
   <h1>Welcome to Day for Good</h1>
-  <p>Make a donation and support a good cause.</p>
+  <p>Make a donation and support a good cause 💚</p>
 
-  <!-- Donation Form -->
+  <!-- ✅ Donation Form -->
   <form id="donation-form">
     <button type="submit">Donate $5</button>
   </form>
 
-  <!-- Stripe Redirect Script -->
+  <!-- ✅ Footer -->
+  <footer>
+    <p>🌎 Day for Good — Together we make the world brighter</p>
+    <p>&copy; 2025 Day for Good</p>
+  </footer>
+
+  <!-- ✅ Stripe Redirect Script -->
   <script>
     document.getElementById("donation-form").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -42,10 +48,5 @@
       }
     });
   </script>
-  <!-- Footer -->
-  <footer class="footer">
-    <p>🌎 Day for Good — Making the world better, one donation at a time.</p>
-    <p><a href="mailto:contact@dayforgood.org">Contact Us</a></p>
-  </footer>
 </body>
 </html>
