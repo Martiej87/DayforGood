@@ -7,21 +7,25 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Navbar -->
   <nav class="navbar">
     <a href="index.html" class="nav-link">Home</a>
-    <a href="success.html" class="nav-link">Success</a>
-    <a href="cancel.html" class="nav-link">Cancel</a>
   </nav>
 
   <h1>🎉 Thank you for your donation!</h1>
-  <p>Your payment was successful and will help support a great cause.</p>
+  <p id="donation-amount"></p>
 
-  <button onclick="window.location.href='index.html'">Back to Home</button>
-  <!-- Footer -->
-  <footer class="footer">
-    <p>🌎 Day for Good — Making the world better, one donation at a time.</p>
-    <p><a href="mailto:contact@dayforgood.org">Contact Us</a></p>
-  </footer>
+  <script>
+    // Get amount from URL (after ?amount=)
+    const params = new URLSearchParams(window.location.search);
+    const amount = params.get("amount");
+
+    if (amount) {
+      document.getElementById("donation-amount").textContent =
+        `You donated $${amount}. We appreciate your support! 💖`;
+    } else {
+      document.getElementById("donation-amount").textContent =
+        "We appreciate your support!";
+    }
+  </script>
 </body>
 </html>
