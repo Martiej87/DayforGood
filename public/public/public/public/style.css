@@ -1,5 +1,8 @@
 /* 🌎 Background + overall style */
 body {
+  background: red;
+}
+
   font-family: Arial, sans-serif;
   text-align: center;
   margin: 0;
