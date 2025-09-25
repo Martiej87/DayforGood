@@ -3,29 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Payment Successful</title>
+  <title>Donation Successful</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Navbar -->
   <nav class="navbar">
     <a href="index.html" class="nav-link">Home</a>
+    <a href="success.html" class="nav-link">Success</a>
+    <a href="cancel.html" class="nav-link">Cancel</a>
   </nav>
 
-  <h1>🎉 Thank you for your donation!</h1>
-  <p id="donation-amount"></p>
-
-  <script>
-    // Get amount from URL (after ?amount=)
-    const params = new URLSearchParams(window.location.search);
-    const amount = params.get("amount");
-
-    if (amount) {
-      document.getElementById("donation-amount").textContent =
-        `You donated $${amount}. We appreciate your support! 💖`;
-    } else {
-      document.getElementById("donation-amount").textContent =
-        "We appreciate your support!";
-    }
-  </script>
+  <h1>🎉 Thank You!</h1>
+  <p>Your donation was successful. You’ve made a positive impact! 🌎</p>
+  <a href="index.html">
+    <button>Return Home</button>
+  </a>
 </body>
 </html>
