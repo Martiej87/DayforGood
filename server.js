@@ -8,7 +8,7 @@ dotenv.config();
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// ✅ Serve static files from "public" folder (index.html, success.html, cancel.html, style.css)
+// ✅ Serve static files from "public" folder
 app.use(express.static("public"));
 
 // ✅ API endpoint to create a Checkout Session
@@ -20,18 +20,16 @@ app.post("/create-checkout-session", async (req, res) => {
         {
           price_data: {
             currency: "usd",
-            product_data: {
-              name: "Donation",
-            },
+            product_data: { name: "Donation" },
             unit_amount: 500, // $5 donation
           },
           quantity: 1,
         },
       ],
       mode: "payment",
-      // 👇 Redirects back to your static success/cancel pages
-      success_url: "http://localhost:3000/success.html",
-      cancel_url: "http://localhost:3000/cancel.html",
+      // 👇 dynamically sets correct URL (works both locally and on Render)
+      success_url: `${req.headers.origin}/success.html`,
+      cancel_url: `${req.headers.origin}/cancel.html`,
     });
 
     res.json({ url: session.url });
