@@ -15,26 +15,28 @@
   </nav>
 
   <h1>Welcome to Day for Good</h1>
-  <p>Select a donation amount and support a good cause.</p>
+  <p>Make a donation and support a good cause.</p>
 
   <!-- ✅ Donation Form -->
   <form id="donation-form">
-    <div>
+    <h2>Choose Your Donation</h2>
+    <div class="donation-options">
       <label>
-        <input type="radio" name="amount" value="500" checked>
-        $5
+        <input type="radio" name="amount" value="5">
+        <span>$5</span>
       </label>
       <label>
-        <input type="radio" name="amount" value="1000">
-        $10
+        <input type="radio" name="amount" value="10">
+        <span>$10</span>
       </label>
       <label>
-        <input type="radio" name="amount" value="2000">
-        $20
+        <input type="radio" name="amount" value="20">
+        <span>$20</span>
       </label>
       <label>
-        Custom: $
-        <input type="number" id="custom-amount" min="1" step="1" placeholder="Enter amount">
+        <input type="radio" name="amount" value="custom">
+        <span>Custom:</span>
+        <input type="number" id="custom-amount" placeholder="USD" min="1">
       </label>
     </div>
     <button type="submit">Donate</button>
@@ -45,19 +47,24 @@
     document.getElementById("donation-form").addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      let amount = document.querySelector('input[name="amount"]:checked').value;
+      // ✅ Get selected amount
+      const selectedOption = document.querySelector('input[name="amount"]:checked');
+      let amount = 5; // default fallback
 
-      // If custom amount is entered, override selection
-      const customInput = document.getElementById("custom-amount").value;
-      if (customInput) {
-        amount = parseInt(customInput) * 100; // Convert dollars → cents
+      if (selectedOption) {
+        if (selectedOption.value === "custom") {
+          const customValue = document.getElementById("custom-amount").value;
+          amount = customValue ? parseFloat(customValue) : 5;
+        } else {
+          amount = parseFloat(selectedOption.value);
+        }
       }
 
       try {
         const response = await fetch("/create-checkout-session", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount }),
+          body: JSON.stringify({ amount }) // ✅ send amount to server
         });
 
         const data = await response.json();
