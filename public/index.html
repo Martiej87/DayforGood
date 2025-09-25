@@ -1,60 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Day for Good</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
-  <!-- ✅ Navbar -->
-  <nav class="navbar">
-    <a href="index.html" class="nav-link">Home</a>
-    <a href="success.html" class="nav-link">Success</a>
-    <a href="cancel.html" class="nav-link">Cancel</a>
-  </nav>
+  <header>
+    <h1>🌎 Day for Good</h1>
+    <p>Donate the value of a workday—or any amount you choose—to make a difference.</p>
+  </header>
 
-  <h1>Day for Good</h1>
-  <p>Enter your hourly wage and donate a full day of work (8 hours).</p>
+  <main>
+    <section class="donation-box">
+      <h2>Choose your donation</h2>
+      <button class="donate-btn" data-amount="500">$5 Donation</button>
+      <button class="donate-btn" data-amount="8000">One Workday ($100)</button>
 
-  <!-- ✅ Wage Input Form -->
-  <form id="donation-form">
-    <label for="wage">Hourly Wage ($):</label>
-    <input type="number" id="wage" name="wage" placeholder="e.g. 20" required>
-    <button type="submit" class="btn">Donate a Day (8 Hours)</button>
-  </form>
+      <div class="custom-donation">
+        <h3>Calculate from your wage</h3>
+        <label for="wage">Hourly Wage ($):</label>
+        <input type="number" id="wage" placeholder="e.g. 15" />
+        
+        <label for="hours">Hours to Donate:</label>
+        <input type="number" id="hours" placeholder="e.g. 8" />
 
-  <!-- ✅ Stripe Integration Script -->
+        <button id="calcBtn">Calculate & Donate</button>
+        <p id="calculatedAmount"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Day for Good</p>
+  </footer>
+
   <script>
-    document.getElementById("donation-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
+    const stripe = Stripe("pk_test_12345"); // Replace with your STRIPE PUBLISHABLE KEY
 
-      const wage = document.getElementById("wage").value;
-      if (!wage || wage <= 0) {
-        alert("Please enter a valid hourly wage.");
-        return;
-      }
+    document.querySelectorAll(".donate-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        startCheckout(btn.dataset.amount);
+      });
+    });
 
-      const donationAmount = wage * 8 * 100; // 8 hours, convert to cents
+    document.getElementById("calcBtn").addEventListener("click", () => {
+      const wage = parseFloat(document.getElementById("wage").value) || 0;
+      const hours = parseFloat(document.getElementById("hours").value) || 0;
+      const total = wage * hours;
 
-      try {
-        const response = await fetch("/create-checkout-session", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: donationAmount }),
-        });
-
-        const data = await response.json();
-        if (data.url) {
-          window.location.href = data.url; // redirect to Stripe
-        } else {
-          alert("Something went wrong. Please try again.");
-        }
-      } catch (err) {
-        console.error("Error:", err);
-        alert("An error occurred. Please try again.");
+      if (total > 0) {
+        document.getElementById("calculatedAmount").innerText = 
+          `You’ll donate: $${total.toFixed(2)}`;
+        startCheckout(Math.round(total * 100)); // cents
+      } else {
+        alert("Enter a valid wage and hours.");
       }
     });
+
+    async function startCheckout(amount) {
+      const res = await fetch("/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount })
+      });
+      const data = await res.json();
+      const result = await stripe.redirectToCheckout({ sessionId: data.id });
+      if (result.error) {
+        alert(result.error.message);
+      }
+    }
   </script>
 </body>
 </html>
