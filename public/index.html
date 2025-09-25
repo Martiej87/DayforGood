@@ -3,38 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Donate a Workday</title>
+  <title>Day for Good</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Donate a Workday</h1>
-  <p>Select your hourly wage, and we'll calculate an 8-hour workday donation.</p>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="success.html" class="nav-link">Success</a>
+    <a href="cancel.html" class="nav-link">Cancel</a>
+  </nav>
 
-  <div id="donation-options">
-    <button onclick="donate(10)">I earn $10/hr</button>
-    <button onclick="donate(20)">I earn $20/hr</button>
-    <button onclick="donate(30)">I earn $30/hr</button>
-    <button onclick="donate(50)">I earn $50/hr</button>
-  </div>
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Donate a Day for Good 🌍</h1>
+    <p>Contribute the value of your workday to causes that matter.</p>
+  </section>
 
-  <script src="https://js.stripe.com/v3/"></script>
-  <script>
-    const stripe = Stripe("pk_test_12345"); // replace with your real publishable key
+  <!-- Donation Options -->
+  <section class="donations">
+    <h2>Choose Your Donation</h2>
+    <form action="/create-checkout-session" method="POST">
+      <button type="submit" name="amount" value="40">$40 (Half Day)</button>
+      <button type="submit" name="amount" value="80">$80 (Full Day)</button>
+      <button type="submit" name="amount" value="160">$160 (Two Days)</button>
+    </form>
+  </section>
 
-    function donate(hourlyRate) {
-      // 1 workday = 8 hours
-      const amount = hourlyRate * 8 * 100; // Stripe needs cents
-
-      fetch("/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount })
-      })
-      .then(res => res.json())
-      .then(data => {
-        return stripe.redirectToCheckout({ sessionId: data.id });
-      });
-    }
-  </script>
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Day for Good • Making the world better, one day at a time 🌎</p>
+  </footer>
 </body>
 </html>
