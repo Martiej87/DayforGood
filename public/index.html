@@ -4,100 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Day for Good</title>
-
-  <!-- ✅ Embedded CSS -->
-  <style>
-    /* 🌎 Background + overall style */
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom right, #74ebd5, #ACB6E5);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* Navbar */
-    .navbar {
-      width: 100%;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.8);
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    }
-
-    .nav-link {
-      text-decoration: none;
-      font-weight: bold;
-      color: #2c3e50;
-      transition: color 0.2s ease-in-out;
-    }
-
-    .nav-link:hover {
-      color: #27ae60;
-    }
-
-    /* Headings */
-    h1 {
-      color: #2c3e50;
-      margin-top: 80px; /* to clear navbar */
-      font-size: 2.5rem;
-    }
-
-    /* Paragraph */
-    p {
-      font-size: 1.2rem;
-      color: #2c3e50;
-      margin-top: 10px;
-    }
-
-    /* Button */
-    button {
-      padding: 12px 24px;
-      font-size: 18px;
-      font-weight: bold;
-      background: #27ae60;
-      color: white;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      margin-top: 20px;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease-in-out;
-    }
-
-    button:hover {
-      background: #219150;
-      transform: scale(1.05);
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- ✅ Navbar -->
+  <!-- Navbar -->
   <nav class="navbar">
     <a href="index.html" class="nav-link">Home</a>
     <a href="success.html" class="nav-link">Success</a>
     <a href="cancel.html" class="nav-link">Cancel</a>
   </nav>
 
-  <h1>🌎 Welcome to Day for Good</h1>
+  <h1>Welcome to Day for Good</h1>
   <p>Make a donation and support a good cause.</p>
 
-  <!-- ✅ Donation Form -->
+  <!-- Donation Form -->
   <form id="donation-form">
     <button type="submit">Donate $5</button>
   </form>
 
-  <!-- ✅ Stripe Redirect Script -->
+  <!-- Stripe Redirect Script -->
   <script>
     document.getElementById("donation-form").addEventListener("submit", async (e) => {
       e.preventDefault();
