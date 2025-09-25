@@ -14,32 +14,12 @@
     <a href="cancel.html" class="nav-link">Cancel</a>
   </nav>
 
-  <h1>Welcome to Day for Good</h1>
+  <h1>🌎 Welcome to Day for Good</h1>
   <p>Make a donation and support a good cause.</p>
 
   <!-- ✅ Donation Form -->
   <form id="donation-form">
-    <h2>Choose Your Donation</h2>
-    <div class="donation-options">
-      <label>
-        <input type="radio" name="amount" value="5">
-        <span>$5</span>
-      </label>
-      <label>
-        <input type="radio" name="amount" value="10">
-        <span>$10</span>
-      </label>
-      <label>
-        <input type="radio" name="amount" value="20">
-        <span>$20</span>
-      </label>
-      <label>
-        <input type="radio" name="amount" value="custom">
-        <span>Custom:</span>
-        <input type="number" id="custom-amount" placeholder="USD" min="1">
-      </label>
-    </div>
-    <button type="submit">Donate</button>
+    <button type="submit">Donate $5</button>
   </form>
 
   <!-- ✅ Stripe Redirect Script -->
@@ -47,26 +27,8 @@
     document.getElementById("donation-form").addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // ✅ Get selected amount
-      const selectedOption = document.querySelector('input[name="amount"]:checked');
-      let amount = 5; // default fallback
-
-      if (selectedOption) {
-        if (selectedOption.value === "custom") {
-          const customValue = document.getElementById("custom-amount").value;
-          amount = customValue ? parseFloat(customValue) : 5;
-        } else {
-          amount = parseFloat(selectedOption.value);
-        }
-      }
-
       try {
-        const response = await fetch("/create-checkout-session", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount }) // ✅ send amount to server
-        });
-
+        const response = await fetch("/create-checkout-session", { method: "POST" });
         const data = await response.json();
 
         if (data.url) {
