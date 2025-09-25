@@ -1,11 +1,17 @@
-const express = require("express");
-const app = express();
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-const path = require("path");
+// server.js
+import express from "express";
+import Stripe from "stripe";
+import dotenv from "dotenv";
 
-// ✅ Serve static files from "public" folder (HTML, CSS, etc.)
+dotenv.config();
+
+const app = express();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+// ✅ Serve static files from "public" folder (index.html, success.html, cancel.html, style.css)
 app.use(express.static("public"));
 
+// ✅ API endpoint to create a Checkout Session
 app.post("/create-checkout-session", async (req, res) => {
   try {
     const session = await stripe.checkout.sessions.create({
@@ -15,7 +21,7 @@ app.post("/create-checkout-session", async (req, res) => {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "Day for Good Donation",
+              name: "Donation",
             },
             unit_amount: 500, // $5 donation
           },
@@ -23,16 +29,20 @@ app.post("/create-checkout-session", async (req, res) => {
         },
       ],
       mode: "payment",
-      success_url: `${req.headers.origin}/success.html`,
-      cancel_url: `${req.headers.origin}/cancel.html`,
+      // 👇 Redirects back to your static success/cancel pages
+      success_url: "http://localhost:3000/success.html",
+      cancel_url: "http://localhost:3000/cancel.html",
     });
 
     res.json({ url: session.url });
   } catch (err) {
     console.error("Error creating checkout session:", err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Something went wrong creating checkout session" });
   }
 });
 
+// ✅ Start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
