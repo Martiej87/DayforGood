@@ -30,8 +30,8 @@ app.post("/create-checkout-session", async (req, res) => {
       ],
       mode: "payment",
       // 👇 IMPORTANT: Replace with your actual Render domain
-      success_url: "https://your-render-app.onrender.com/success.html",
-      cancel_url: "https://your-render-app.onrender.com/cancel.html",
+      success_url: "https://dayforgood.onrender.com/success.html",
+      cancel_url: "https://dayforgood.onrender.com/cancel.html",
     });
 
     res.json({ url: session.url });
