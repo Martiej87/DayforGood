@@ -68,3 +68,13 @@ button:hover {
   background: #219150;
   transform: scale(1.05);
 }
+/* Footer */
+footer {
+  margin-top: 40px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  font-size: 14px;
+  color: #2c3e50;
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
