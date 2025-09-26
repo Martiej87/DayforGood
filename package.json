@@ -1,14 +1,26 @@
 {
-  "name": "dayforgood",
+  "name": "day-for-good",
   "version": "1.0.0",
-  "description": "Donation platform for Day for Good",
+  "description": "Donation website where people can give the value of a workday or any amount.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
+  "keywords": [
+    "donation",
+    "stripe",
+    "nonprofit",
+    "fundraising"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "stripe": "^14.0.0"
+    "dotenv": "^16.3.1",
+    "express": "^4.21.1",
+    "stripe": "^14.20.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
